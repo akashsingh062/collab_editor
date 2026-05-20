@@ -227,13 +227,24 @@ function ChatPanel({
                   ) : (
                     <>
                       {msg.type === "image" && msg.image && (
-                        <div className="relative mb-1 rounded-lg overflow-hidden border border-slate-950">
+                        <div className="relative mb-1 rounded-lg overflow-hidden border border-slate-950 group/img">
                           <img
                             src={msg.image}
                             alt="Shared attachment"
-                            className="max-w-full max-h-48 object-cover cursor-zoom-in hover:brightness-95 transition"
+                            className="max-w-full max-h-48 object-cover cursor-zoom-in hover:brightness-90 transition"
                             onClick={() => setFullscreenImage(msg.image)}
                           />
+                          <a
+                            href={msg.image}
+                            download={`collab_edit_image_${Date.now()}.png`}
+                            className="absolute bottom-2 right-2 opacity-0 group-hover/img:opacity-100 p-1.5 rounded-lg bg-slate-950/80 hover:bg-slate-950 text-slate-200 hover:text-white transition cursor-pointer shadow-lg z-10 flex items-center justify-center"
+                            title="Download Image"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                            </svg>
+                          </a>
                         </div>
                       )}
                       <p className={`text-xs break-words whitespace-pre-wrap pr-4 ${textFontClass}`}>{msg.text}</p>
@@ -318,12 +329,24 @@ function ChatPanel({
       {/* Lightbox / Fullscreen Image Overlay */}
       {fullscreenImage && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4 animate-in fade-in duration-150">
-          <button
-            onClick={() => setFullscreenImage(null)}
-            className="absolute top-4 right-4 p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-slate-200 transition cursor-pointer"
-          >
-            ✕ Close
-          </button>
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <a
+              href={fullscreenImage}
+              download={`collab_edit_image_${Date.now()}.png`}
+              className="px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-lg active:scale-95 cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Download
+            </a>
+            <button
+              onClick={() => setFullscreenImage(null)}
+              className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-250 transition text-xs font-bold cursor-pointer"
+            >
+              ✕ Close
+            </button>
+          </div>
           <img src={fullscreenImage} alt="Shared fullscreen attachment" className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl" />
         </div>
       )}

@@ -185,7 +185,7 @@ ySocketIO.nsp.on("connection", (socket) => {
       socket.nsp.emit("room-lock-changed", { isLocked });
     }
   });
-});
+}); 
 
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, () => {
